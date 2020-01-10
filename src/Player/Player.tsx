@@ -42,6 +42,10 @@ const Player: React.FC<IProps> = ({
       <div className={styles.progressBar}>
         <span style={{ height: `${score}%` }}></span>
       </div>
+      <div className={styles.diceBox}>
+        <div>{playerOne ? diceOne : diceThree}</div>
+        <div>{playerOne ? diceTwo : diceFour}</div>
+      </div>
     </div>
   );
 };

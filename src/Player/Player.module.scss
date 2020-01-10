@@ -1,7 +1,7 @@
 .playerOne,
 .playerTwo {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr 10rem;
   grid-gap: 2rem;
 }
 
@@ -27,6 +27,33 @@
   }
 }
 
+.diceBox {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 0.5rem;
+
+  div {
+    width: 100%;
+    height: 100%;
+    border: 1px solid grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  div:nth-of-type(1) {
+    grid-column: 1/2;
+  }
+
+  div:nth-of-type(2) {
+    grid-column: 2/3;
+  }
+}
+
 .playerOne {
   grid-template-columns: min-content 1fr;
 
@@ -38,6 +65,11 @@
   .progressBar {
     order: 1;
     grid-column: 1/2;
+  }
+
+  .diceBox {
+    grid-column: 2/3;
+    grid-row: 2/3;
   }
 }
 
