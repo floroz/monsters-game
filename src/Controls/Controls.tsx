@@ -7,9 +7,11 @@ interface Props {
 
 const Controls: React.FC<Props> = ({ onAttack }) => {
   return (
-    <div>
-      <h1>Test</h1>
-      <button onClick={onAttack}>Attack!</button>
+    <div className={styles.controls}>
+      <h2 className={styles.title}>Test</h2>
+      <button className={styles.button} onClick={onAttack}>
+        Attack!
+      </button>
     </div>
   );
 };

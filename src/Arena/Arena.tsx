@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useState } from "react";
+import React, { useReducer, useEffect } from "react";
 import styles from "./Arena.module.scss";
 import Player from "../Player/Player";
 import Controls from "../Controls/Controls";
@@ -31,10 +31,6 @@ const Arena: React.FC<Props> = () => {
     gameIsOver
   } = state;
 
-  useEffect(() => {
-    // setup
-  }, []);
-
   /**
    * This effect watches for changes on the player scores and triggers the game over
    */
@@ -44,23 +40,10 @@ const Arena: React.FC<Props> = () => {
     }
   }, [playerOneScore, playerTwoScore]);
 
-  const onAttack = (): void => {
-    // Player 1
-    // roll dice 1 and roll dice 2 and save player1Roll
-    const dice1 = diceRoll();
-    dispatch({ type: DICE_ONE, payload: dice1 });
-    const dice2 = diceRoll();
-    const player1Roll = dice1 + dice2;
-    dispatch({ type: DICE_TWO, payload: dice2 });
-
-    // Player 2
-    // roll dice 3 and roll dice 4 and save player2Roll
-    const dice3 = diceRoll();
-    dispatch({ type: DICE_THREE, payload: dice3 });
-    const dice4 = diceRoll();
-    dispatch({ type: DICE_FOUR, payload: dice4 });
-    const player2Roll = dice3 + dice4;
-
+  const updatePlayersScore = (
+    player1Roll: number,
+    player2Roll: number
+  ): void => {
     // Check the winner of the round
     let hitAmount: number;
 
@@ -70,16 +53,39 @@ const Arena: React.FC<Props> = () => {
     } else if (player1Roll > player2Roll) {
       // player 2 gets hit
       hitAmount = player1Roll - player2Roll;
-      dispatch({ type: PLAYER_TWO_HIT, payload: hitAmount });
+      dispatch({
+        type: PLAYER_TWO_HIT,
+        payload: hitAmount
+      });
     } else {
       // player 1 gets hit
       hitAmount = player2Roll - player1Roll;
-      dispatch({ type: PLAYER_ONE_HIT, payload: hitAmount });
+      dispatch({
+        type: PLAYER_ONE_HIT,
+        payload: hitAmount
+      });
     }
+  };
 
-    // reduce losing player health
+  const onAttack = (): void => {
+    // Player 1
+    // roll dice 1 and roll dice 2 and save player1Roll
+    const dice1 = diceRoll();
+    const dice2 = diceRoll();
+    dispatch({ type: DICE_ONE, payload: dice1 });
+    dispatch({ type: DICE_TWO, payload: dice2 });
+    const player1Roll = dice1 + dice2;
 
-    // display UI
+    // Player 2
+    // roll dice 3 and roll dice 4 and save player2Roll
+    const dice3 = diceRoll();
+    const dice4 = diceRoll();
+    dispatch({ type: DICE_THREE, payload: dice3 });
+    dispatch({ type: DICE_FOUR, payload: dice4 });
+    const player2Roll = dice3 + dice4;
+
+    // Update players score
+    updatePlayersScore(player1Roll, player2Roll);
   };
 
   const onRestart = (): void => {
@@ -88,9 +94,19 @@ const Arena: React.FC<Props> = () => {
 
   return (
     <section className={styles.section}>
-      <Player score={playerOneScore} />
+      <Player
+        score={playerOneScore}
+        diceOne={diceOne}
+        diceTwo={diceTwo}
+        imgSrc=""
+      />
       <Controls onAttack={onAttack} />
-      <Player score={playerTwoScore} />
+      <Player
+        score={playerTwoScore}
+        diceThree={diceThree}
+        diceFour={diceFour}
+        imgSrc=""
+      />
       {gameIsOver && <Dialog onRestart={onRestart} />}
     </section>
   );
