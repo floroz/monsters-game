@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import styles from "./Arena.module.scss";
 import Player from "../Player/Player";
 import Controls from "../Controls/Controls";
@@ -15,11 +15,14 @@ import {
   GAME_OVER,
   RESTART
 } from "../store/actionTypes";
+import img1 from "../images/corbyn.jpg";
+import img2 from "../images/johnson.jpg";
 
 interface Props {}
 
 const Arena: React.FC<Props> = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [playerMessage, setPlayerMessage] = useState("Ready?");
 
   const {
     playerOneScore,
@@ -49,10 +52,12 @@ const Arena: React.FC<Props> = () => {
 
     if (player1Roll === player2Roll) {
       // draw round
+      setPlayerMessage("John Bercow stops them!");
       return;
     } else if (player1Roll > player2Roll) {
       // player 2 gets hit
       hitAmount = player1Roll - player2Roll;
+      setPlayerMessage(`Corbyn hits for ${hitAmount}`);
       dispatch({
         type: PLAYER_TWO_HIT,
         payload: hitAmount
@@ -64,6 +69,7 @@ const Arena: React.FC<Props> = () => {
         type: PLAYER_ONE_HIT,
         payload: hitAmount
       });
+      setPlayerMessage(`Johnson hits for ${hitAmount}`);
     }
   };
 
@@ -98,14 +104,14 @@ const Arena: React.FC<Props> = () => {
         score={playerOneScore}
         diceOne={diceOne}
         diceTwo={diceTwo}
-        imgSrc=""
+        imgSrc={img1}
       />
-      <Controls onAttack={onAttack} />
+      <Controls onAttack={onAttack} msg={playerMessage} />
       <Player
         score={playerTwoScore}
         diceThree={diceThree}
         diceFour={diceFour}
-        imgSrc=""
+        imgSrc={img2}
       />
       {gameIsOver && <Dialog onRestart={onRestart} />}
     </section>
